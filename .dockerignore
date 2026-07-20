@@ -1,0 +1,13 @@
+node_modules
+.git
+.github
+.vscode
+.gitignore
+README.md
+DEVSECOPS.md
+dist
+dist-ssr
+public/db.php
+public/admin-config.php
+public/capi-config.php
+public/uploads

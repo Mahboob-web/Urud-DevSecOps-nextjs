@@ -1,0 +1,14 @@
+{
+  "name": "Speak in Urdu — Learn Urdu Online with Native Teachers",
+  "short_name": "Speak in Urdu",
+  "description": "Live 1-on-1 online Urdu classes with native teachers. Private lessons for kids and women, plus GCSE exam prep and seasonal Urdu courses, with a free trial class.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F7F2EA",
+  "theme_color": "#1F4D3A",
+  "lang": "en",
+  "icons": [
+    { "src": "/favicon.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

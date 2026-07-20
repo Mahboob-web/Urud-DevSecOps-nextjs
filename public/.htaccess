@@ -1,0 +1,52 @@
+# Speak in Urdu — Apache config for Hostinger shared hosting.
+# Handles: HTTPS redirect, clean URLs for prerendered pages, SPA fallback.
+
+RewriteEngine On
+Options -MultiViews
+
+# 1. Force HTTPS (Hostinger issues a free SSL cert automatically — this just
+#    redirects any plain-http request to the same URL on https).
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# 2. Blog + sitemap are PHP-rendered from the database (not prerendered
+#    static files), so new posts published from /admin.php go live
+#    immediately without a site rebuild. These rules take priority over the
+#    static clean-URL rule below.
+RewriteRule ^sitemap\.xml$ sitemap.php [L]
+RewriteRule ^blog/?$ blog.php [L]
+RewriteRule ^blog/([a-zA-Z0-9-]+)/?$ blog-post.php?slug=$1 [L,QSA]
+
+# 3. Clean URLs: /courses serves the prerendered /courses/index.html directly
+#    (no visible redirect, URL bar stays as /courses).
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI}/index.html -f
+RewriteRule ^(.*[^/])$ $1/index.html [L]
+
+# 4. SPA fallback: any other path that isn't a real file or folder (e.g. a
+#    route added after the last build, or a deep link the prerenderer
+#    doesn't know about yet) falls back to the app shell so client-side
+#    routing still works.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ /index.html [L]
+
+# Cache aggressively — safe everywhere here because every asset's URL
+# changes whenever its content does, so a long cache can never serve a
+# stale copy: JS/PNG built by Vite get a content-hash filename, and
+# site.css / favicon.png / social-share.png / logo-full-white.png are all
+# requested with a ?v=<hash-or-mtime> query string (see scripts/prerender.js
+# for the React side, blog-lib.php's asset_version() for the PHP side).
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

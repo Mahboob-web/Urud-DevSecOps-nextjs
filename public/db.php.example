@@ -1,0 +1,42 @@
+<?php
+/**
+ * Shared database connection for the site's PHP form handlers.
+ *
+ * This is a TEMPLATE, safe to commit to git — it has no real credentials.
+ * Copy this file to `db.php` (same folder) and fill in your real Hostinger
+ * database values there. `db.php` itself is gitignored so your password
+ * never ends up in version control. See SETUP.md for the full walkthrough.
+ *
+ * This file is only ever `require`-d by book-trial.php / contact.php /
+ * newsletter.php — it's not meant to be requested directly, hence the guard
+ * below.
+ */
+
+if (!defined("APP_BOOTSTRAP")) {
+  http_response_code(403);
+  exit("Forbidden");
+}
+
+const DB_HOST = "localhost";               // Almost always "localhost" on Hostinger.
+const DB_NAME = "u123456789_speakinurdu";  // hPanel > Databases > Databases > Database name.
+const DB_USER = "u123456789_dbuser";       // hPanel > Databases > Databases > Username.
+const DB_PASS = "the-password-you-set";
+
+/**
+ * Returns a PDO connection, or null if the connection fails — callers should
+ * treat a null return as "database unavailable, fall back to email only"
+ * rather than crash the whole request.
+ */
+function db_connect(): ?PDO {
+  try {
+    return new PDO(
+      "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4",
+      DB_USER,
+      DB_PASS,
+      [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+    );
+  } catch (Throwable $e) {
+    error_log("DB connection failed: " . $e->getMessage());
+    return null;
+  }
+}

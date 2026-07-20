@@ -1,0 +1,23 @@
+<?php
+/**
+ * Meta Conversions API credentials — TEMPLATE, safe to commit to git.
+ *
+ * Copy this file to `capi-config.php` (same folder) and fill in your real
+ * values. `capi-config.php` is gitignored so your real access token never
+ * ends up in version control — same pattern as db.php / admin-config.php.
+ *
+ * How to get these values:
+ *   1. Go to Meta Events Manager (business.facebook.com/events_manager2).
+ *   2. Select your pixel (Data Sources > your pixel).
+ *   3. Settings tab > "Conversions API" section > "Generate access token".
+ *   4. Copy that token below. It does not expire unless you revoke it.
+ *
+ * If this file is missing or CAPI_ACCESS_TOKEN is left blank, server-side
+ * event tracking is silently skipped — the rest of the site keeps working
+ * normally, you just won't get the ad-blocker-resistant tracking this
+ * enables. The browser-side Meta Pixel (in index.html / blog-layout.php)
+ * keeps working either way.
+ */
+
+const PIXEL_ID = "27401886419482144";
+const CAPI_ACCESS_TOKEN = "";

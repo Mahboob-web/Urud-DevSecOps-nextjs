@@ -1,0 +1,32 @@
+name: Deploy to EC2
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up SSH key
+        env:
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$EC2_SSH_KEY" > ~/.ssh/ec2_key.pem
+          chmod 600 ~/.ssh/ec2_key.pem
+
+      - name: Deploy via Ansible
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ansible
+          export ANSIBLE_HOST_KEY_CHECKING=False
+          ansible-playbook -i "$EC2_HOST," ansible/playbook.yml -u ubuntu --private-key ~/.ssh/ec2_key.pem

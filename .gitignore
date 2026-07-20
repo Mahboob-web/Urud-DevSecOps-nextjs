@@ -1,0 +1,7 @@
+node_modules
+dist
+dist-ssr
+public/db.php
+public/admin-config.php
+public/capi-config.php
+public/uploads

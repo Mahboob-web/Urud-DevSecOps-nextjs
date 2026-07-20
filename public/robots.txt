@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /admin.php
+Disallow: /admin-config.php
+Disallow: /db.php
+Disallow: /book-trial.php
+Disallow: /contact.php
+Disallow: /newsletter.php
+
+Sitemap: https://speakinurdu.com/sitemap.xml

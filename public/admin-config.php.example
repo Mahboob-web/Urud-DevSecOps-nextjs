@@ -1,0 +1,10 @@
+<?php
+/**
+ * Admin dashboard password — TEMPLATE, safe to commit to git.
+ *
+ * Copy this file to `admin-config.php` (same folder) and set a real
+ * password there. `admin-config.php` is gitignored so your real password
+ * never ends up in version control — same pattern as db.php.
+ */
+
+const ADMIN_PASSWORD = "change-this-password";

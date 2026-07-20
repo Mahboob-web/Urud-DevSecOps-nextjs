@@ -1,0 +1,45 @@
+---
+- name: Deploy static site container
+  hosts: webservers
+  become: true
+  vars:
+    app_dir: /opt/speak-in-urdu
+  tasks:
+    - name: Install Docker dependencies
+      apt:
+        name:
+          - docker.io
+          - docker-compose-plugin
+          - nginx
+        state: present
+        update_cache: true
+
+    - name: Start and enable Docker
+      systemd:
+        name: docker
+        enabled: true
+        state: started
+
+    - name: Create app directory
+      file:
+        path: "{{ app_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Copy docker compose file
+      copy:
+        src: ../docker-compose.yml
+        dest: "{{ app_dir }}/docker-compose.yml"
+
+    - name: Copy nginx config
+      copy:
+        src: ../nginx.conf
+        dest: "{{ app_dir }}/nginx.conf"
+
+    - name: Copy Dockerfile
+      copy:
+        src: ../Dockerfile
+        dest: "{{ app_dir }}/Dockerfile"
+
+    - name: Start app container
+      command: docker compose -f "{{ app_dir }}/docker-compose.yml" up -d --build
