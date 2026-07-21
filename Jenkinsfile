@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        DOCKERHUB_REPO   = 'yourdockerhubuser/react-app'   // TODO: replace
+        DOCKERHUB_REPO   = 'mahboobdev/react-app'   // TODO: replace
         IMAGE_TAG        = "${env.BUILD_NUMBER}"
         K8S_NAMESPACE    = 'default'                        // TODO: replace
         K8S_DEPLOYMENT   = 'react-app-deployment'            // TODO: replace
