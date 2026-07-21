@@ -30,18 +30,21 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('sonarqube') {
-                    sh '''
-                        $SCANNER_HOME/bin/sonar-scanner \
-                          -Dsonar.projectKey=react-app \
-                          -Dsonar.sources=src \
-                          -Dsonar.host.url=$SONAR_HOST_URL \
-                          -Dsonar.login=$SONAR_AUTH_TOKEN
-                    '''
-                }
-            }
+    environment {
+        SCANNER_HOME = tool 'sonar-scanner'
+    }
+    steps {
+        withSonarQubeEnv('sonarqube') {
+            sh '''
+                $SCANNER_HOME/bin/sonar-scanner \
+                  -Dsonar.projectKey=react-app \
+                  -Dsonar.sources=src \
+                  -Dsonar.host.url=$SONAR_HOST_URL \
+                  -Dsonar.token=$SONAR_AUTH_TOKEN
+            '''
         }
+    }
+}
 
         stage('Quality Gate') {
             steps {
